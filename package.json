@@ -2,7 +2,7 @@
   "name": "cert-generator",
   "version": "0.1.0",
   "private": true,
-  "main": "electron.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "description": "一个简单易用的证书生成工具",
   "author": "Certificate Generator Team",
@@ -23,14 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "npm run build && cp electron.js build/electron.js && electron build/",
-    "electron-dev": "npm run build && cp electron.js build/electron.js && electron build/",
-    "electron-prod": "NODE_ENV=production npm run build && cp electron.js build/electron.js && electron build/",
-    "dev-server": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-pack": "npm run build && cp electron.js build/electron.js && electron-builder",
-    "build-electron": "npm run build && cp electron.js build/electron.js && npx electron-builder --win",
-    "build-all": "npm run build && cp electron.js build/electron.js && npx electron-builder",
-    "dist": "npm run build && cp electron.js build/electron.js && npx electron-builder --publish=never"
+    "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dist": "npm run build && electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -54,40 +48,27 @@
     "concurrently": "^9.2.0",
     "electron": "^37.2.1",
     "electron-builder": "^26.0.12",
-    "electron-packager": "^17.1.2",
     "url-loader": "^4.1.1",
     "wait-on": "^8.0.3"
   },
   "build": {
     "appId": "com.certgenerator.app",
     "productName": "证书生成器",
-    "directories": {
-      "output": "dist"
-    },
     "files": [
       "build/**/*",
-      "electron.js",
-      "node_modules/**/*",
-      "package.json"
+      "node_modules/**/*"
     ],
+    "directories": {
+      "buildResources": "assets"
+    },
     "mac": {
-      "category": "public.app-category.productivity",
       "target": "dmg"
     },
     "win": {
-      "target": "nsis",
-      "requestedExecutionLevel": "asInvoker"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "deleteAppDataOnUninstall": false
+      "target": "nsis"
     },
     "linux": {
-      "target": "AppImage",
-      "category": "Productivity"
+      "target": "AppImage"
     }
   }
 }

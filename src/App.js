@@ -4,6 +4,8 @@ import jsPDF from 'jspdf';
 import cert2Svg from './static/cert2.svg';
 import './App.css';
 
+const isElectron = window && window.process && window.process.type;
+
 function App() {
   const [name, setName] = useState('鲍宇涵');
   const [planeName, setPlaneName] = useState('B737MAX');
@@ -11,6 +13,13 @@ function App() {
   const [svgContent, setSvgContent] = useState('');
   const [isA4Preview, setIsA4Preview] = useState(false);
   const svgRef = useRef(null);
+
+  useEffect(() => {
+    if (isElectron) {
+      const { ipcRenderer } = window.require('electron');
+      ipcRenderer.send('set-title', '证书生成器');
+    }
+  }, []);
 
   // 加载SVG文件
   useEffect(() => {
@@ -20,7 +29,7 @@ function App() {
     } else {
       // 尝试从导入的SVG文件加载
       if (cert2Svg) {
-        // 如果是文件路径，则fetch获取内容
+        // 如���是文件路径，则fetch获取内容
         fetch(cert2Svg)
           .then(response => response.text())
           .then(data => {
@@ -80,7 +89,7 @@ function App() {
     const chineseDateRegex = /(<tspan[^>]*class="chinese-date"[^>]*>)[^<]*(<\/tspan>)/g;
     updatedSvg = updatedSvg.replace(chineseDateRegex, `$1${chineseDateStr}$2`);
 
-    // 更新英文日期 (english-date class)
+    // 更新英文��期 (english-date class)
     const englishDateStr = formatEnglishDate(newDate);
     const englishDateRegex = /(<tspan[^>]*class="english-date"[^>]*>)[^<]*(<\/tspan>)/g;
     updatedSvg = updatedSvg.replace(englishDateRegex, `$1${englishDateStr}$2`);
