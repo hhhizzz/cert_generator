@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import FontFaceObserver from 'fontfaceobserver';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import cert2Svg from './static/cert2.svg';
@@ -54,7 +55,7 @@ function App() {
         '/cert2.svg',         // public 目录的路径（备用）
         './static/cert2.svg'  // 相对路径（备用）
       ];
-      
+
       for (const path of svgPaths) {
         try {
           const response = await fetch(path);
@@ -151,6 +152,9 @@ function App() {
 
   const exportToPDF = async () => {
     if (svgRef.current) {
+      // 1️⃣ 等字体
+      const font = new FontFaceObserver('SourceHanSerifSCVF-Bold');   // 与 @font-face family 名一致
+      await font.load(null, 5000);                       // 最多等 5 秒
       try {
         // 将SVG转换为Canvas
         const canvas = await html2canvas(svgRef.current, {
@@ -181,7 +185,7 @@ function App() {
         const y = (pdfHeight - height) / 2;
 
         pdf.addImage(imgData, 'PNG', x, y, width, height);
-      pdf.save(`certificate-${name}-${planeName}-${formatChineseDate(selectedDate)}.pdf`);
+        pdf.save(`certificate-${name}-${planeName}-${formatChineseDate(selectedDate)}.pdf`);
       } catch (error) {
         console.error('导出PDF时出错:', error);
         alert('导出PDF时出错，请重试。');
