@@ -27,6 +27,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'SourceHanSerifSCVF-Bold';
+  src: url('./SourceHanSerifCN-Medium.ttf') format('truetype');
+  font-weight: medium;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
